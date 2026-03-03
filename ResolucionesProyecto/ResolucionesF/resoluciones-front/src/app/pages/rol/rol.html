@@ -1,0 +1,150 @@
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <header class="page-head">
+    <div>
+      <h1>Roles</h1>
+      <p>Administra los roles del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openCreate()">
+      ➕ Nuevo Rol
+    </button>
+  </header>
+
+  <!-- FORMULARIO -->
+  <section class="card" *ngIf="showForm">
+
+    <div class="card-head">
+      <h2>{{ isEdit ? 'Editar Rol' : 'Crear Rol' }}</h2>
+      <button class="btn-secondary" (click)="cancel()">Cerrar</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <div class="form-grid">
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Ej: ADMIN, USUARIO"
+            [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched">
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea
+            formControlName="description"
+            rows="4"
+            placeholder="Descripción del rol, permisos o responsabilidades">
+          </textarea>
+        </div>
+
+      </div>
+
+      <!-- Estado -->
+      <div class="form-group switch">
+        <label>
+          <input type="checkbox" formControlName="active">
+          <span>Activo</span>
+        </label>
+      </div>
+
+      <!-- Botones -->
+      <div class="actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="cancel()"
+          [disabled]="saving">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="saving">
+          <span *ngIf="!saving">
+            {{ isEdit ? '💾 Actualizar' : '💾 Guardar' }}
+          </span>
+          <span *ngIf="saving">
+            ⏳ Guardando...
+          </span>
+        </button>
+
+      </div>
+
+    </form>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="card">
+
+    <div class="table-head">
+      <h2>Listado de Roles ({{ roles.length }})</h2>
+
+      <button
+        class="btn-link"
+        (click)="loadRoles()"
+        *ngIf="!loading">
+        🔄 Recargar
+      </button>
+
+      <span class="muted" *ngIf="loading">⏳ Cargando...</span>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading || roles.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let rol of roles; trackBy: trackById">
+          <td>{{ rol.id }}</td>
+          <td><strong>{{ rol.name }}</strong></td>
+          <td>{{ rol.description || '—' }}</td>
+          <td>
+      <span class="pill" [class.pill-ok]="rol.active" [class.pill-off]="!rol.active">
+        {{ rol.active ? '✓ Activo' : '✗ Inactivo' }}
+      </span>
+          </td>
+
+          <td>
+            <button class="btn-secondary" (click)="openEdit(rol)" [disabled]="saving">
+              ✏️ Editar
+            </button>
+
+            <button
+              class="btn-secondary"
+              style="margin-left:6px"
+              [routerLink]="['/roles', rol.id, 'permissions']"
+              [disabled]="saving">
+              🔐 Permisos
+            </button>
+
+            <button
+              class="btn-danger"
+              style="margin-left:6px"
+              (click)="toggleRolStatus(rol)"
+              [disabled]="saving">
+              {{ rol.active ? '⛔ Desactivar' : '✅ Activar' }}
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+</div>

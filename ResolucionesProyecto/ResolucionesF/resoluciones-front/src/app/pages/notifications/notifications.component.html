@@ -1,0 +1,58 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <h1>Notificaciones</h1>
+      <p>
+        Tienes {{ unreadCount }} notificacion(es) sin leer.
+      </p>
+    </div>
+
+    <button
+      class="btn-primary"
+      (click)="markAllAsRead()"
+      [disabled]="loading || unreadCount === 0"
+    >
+      Marcar todas como leidas
+    </button>
+  </header>
+
+  <!-- Loading -->
+  <section class="card" *ngIf="loading && notifications.length === 0">
+    <p class="muted" style="text-align:center; padding: 24px;">Cargando notificaciones...</p>
+  </section>
+
+  <!-- Error -->
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <!-- Empty state -->
+  <section class="card" *ngIf="!loading && notifications.length === 0 && !error">
+    <p class="empty-state">No tienes notificaciones.</p>
+  </section>
+
+  <!-- Notification list -->
+  <div class="notification-list" *ngIf="notifications.length > 0">
+    <div
+      *ngFor="let n of notifications; trackBy: trackById"
+      class="notification-item"
+      [class.unread]="!n.state"
+      [class.read]="n.state"
+      (click)="markAsRead(n)"
+      role="button"
+      tabindex="0"
+      [attr.aria-label]="n.state ? 'Notificacion leida: ' + n.message : 'Notificacion sin leer: ' + n.message"
+      (keydown.enter)="markAsRead(n)"
+    >
+      <div class="notification-header">
+        <span class="notification-badge" *ngIf="!n.state">Nueva</span>
+        <span class="notification-channel">{{ n.channel }}</span>
+      </div>
+      <p class="notification-msg">{{ n.message }}</p>
+      <div class="notification-footer">
+        <span class="notification-date">{{ formatDate(n.date) }}</span>
+        <span class="notification-read-date" *ngIf="n.readIn">
+          Leida: {{ formatDate(n.readIn) }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

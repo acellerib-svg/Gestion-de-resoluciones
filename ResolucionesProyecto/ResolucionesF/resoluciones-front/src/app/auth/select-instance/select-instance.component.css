@@ -1,0 +1,73 @@
+.select-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0fdf4;
+}
+
+.select-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+}
+
+.logo {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+}
+
+h2 {
+  color: #1B7505;
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 14px;
+  margin: 0 0 24px;
+}
+
+.error {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.instance-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.instance-btn {
+  padding: 14px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.instance-btn:hover:not(:disabled) {
+  border-color: #1B7505;
+  background: rgba(27, 117, 5, 0.06);
+  color: #1B7505;
+}
+
+.instance-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

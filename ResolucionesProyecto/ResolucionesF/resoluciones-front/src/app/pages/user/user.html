@@ -1,0 +1,183 @@
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <header class="page-head">
+    <div>
+      <h1>Usuarios</h1>
+      <p>Administra los usuarios del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openCreate()">➕ Nuevo Usuario</button>
+  </header>
+
+  <!-- FORMULARIO -->
+  <section class="card" *ngIf="showForm">
+    <div class="card-head">
+      <h2>{{ isEdit ? 'Editar Usuario' : 'Crear Usuario' }}</h2>
+      <button class="btn-secondary" (click)="cancel()">Cerrar</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Usuario</label>
+          <input
+            type="text"
+            formControlName="user"
+            placeholder="Ej: jlopez"
+            [class.invalid]="form.get('user')?.invalid && form.get('user')?.touched"
+          />
+        </div>
+
+        <!-- ✅ Password SOLO en CREATE -->
+        <div class="form-group" *ngIf="!isEdit">
+          <label>Contraseña</label>
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Mínimo 4 caracteres"
+            [class.invalid]="form.get('password')?.invalid && form.get('password')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Nombres</label>
+          <input
+            type="text"
+            formControlName="names"
+            placeholder="Ej: José Anthony"
+            [class.invalid]="form.get('names')?.invalid && form.get('names')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Apellidos</label>
+          <input
+            type="text"
+            formControlName="surnames"
+            placeholder="Ej: Pérez López"
+            [class.invalid]="form.get('surnames')?.invalid && form.get('surnames')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" formControlName="phone" placeholder="Opcional" />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="correo@uteq.edu.ec"
+            [class.invalid]="form.get('email')?.invalid && form.get('email')?.touched"
+          />
+        </div>
+
+      </div>
+
+      <div class="form-group switch">
+        <label>
+          <input type="checkbox" formControlName="state" />
+          <span>Activo</span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="saving">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-primary" [disabled]="saving">
+          {{ saving ? '⏳ Guardando...' : (isEdit ? '💾 Actualizar' : '💾 Guardar') }}
+        </button>
+      </div>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </form>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="card">
+
+    <div class="table-head">
+      <h2>Listado ({{ filtered.length }})</h2>
+
+      <div class="filters">
+        <input
+          class="search"
+          type="text"
+          placeholder="Buscar por usuario, nombre o email..."
+          [(ngModel)]="search"
+          (input)="applyFilters()"
+        />
+
+        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+          <option value="ALL">Todos</option>
+          <option value="ACTIVE">Activos</option>
+          <option value="INACTIVE">Inactivos</option>
+        </select>
+
+        <button class="btn-link" (click)="load()" *ngIf="!loading">🔄 Recargar</button>
+        <span class="muted" *ngIf="loading">⏳ Cargando...</span>
+      </div>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading || filtered.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th style="width:320px;">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let u of filtered; trackBy: trackById">
+          <td>{{ u.id }}</td>
+          <td><strong>{{ u.user }}</strong></td>
+          <td>{{ u.names }} {{ u.surnames }}</td>
+          <td>{{ u.email }}</td>
+
+          <td>
+            <span class="pill" [class.pill-ok]="u.state" [class.pill-off]="!u.state">
+              {{ u.state ? '✓ Activo' : '✗ Inactivo' }}
+            </span>
+          </td>
+
+          <td>
+            <button class="btn-secondary" (click)="openEdit(u)" [disabled]="saving">
+              ✏️ Editar
+            </button>
+
+            <button class="btn-danger" style="margin-left:6px" (click)="toggleState(u)" [disabled]="saving">
+              {{ u.state ? '⛔ Desactivar' : '✅ Activar' }}
+            </button>
+
+            <!-- Opcional: eliminar -->
+            <!--
+            <button class="btn-danger" style="margin-left:6px" (click)="delete(u)" [disabled]="saving">
+              🗑️ Eliminar
+            </button>
+            -->
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && filtered.length === 0">
+          <td colspan="6" class="empty">📭 No hay usuarios registrados.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+</div>

@@ -1,0 +1,40 @@
+<h1>Inicio</h1>
+<p class="pag-sub">
+  Resumen general del sistema de resoluciones
+</p>
+
+<p class="error" *ngIf="error">{{ error }}</p>
+<p class="muted" *ngIf="loading">Cargando estadisticas...</p>
+
+<!-- CARDS -->
+<div class="cartas">
+  <div class="carta">
+    <h3>Total resoluciones</h3>
+    <strong>{{ totalResolutions }}</strong>
+  </div>
+
+  <div class="carta">
+    <h3>En elaboraci&oacute;n</h3>
+    <strong>{{ inProgress }}</strong>
+  </div>
+
+  <div class="carta">
+    <h3>Aprobadas</h3>
+    <strong>{{ approved }}</strong>
+  </div>
+
+  <div class="carta">
+    <h3>Rechazadas</h3>
+    <strong>{{ rejected }}</strong>
+  </div>
+
+  <div class="carta">
+    <h3>Trasladadas</h3>
+    <strong>{{ transferred }}</strong>
+  </div>
+
+  <div class="carta">
+    <h3>Archivadas</h3>
+    <strong>{{ archived }}</strong>
+  </div>
+</div>

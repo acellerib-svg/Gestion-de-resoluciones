@@ -1,0 +1,48 @@
+<main class="register-container">
+  <section class="register-card">
+
+    <header class="register-header">
+      <div class="logo">
+        <img src="/uteqLogo.png" alt="LogoUteq">
+      </div>
+      <h1>Pide tus credenciales</h1>
+      <p>Ingresa tu correo institucional y te enviaremos tu usuario y contrase&ntilde;a</p>
+    </header>
+
+    <!-- MENSAJE DE EXITO -->
+    <div class="success-box" *ngIf="success">
+      <p>{{ success }}</p>
+      <a routerLink="/login" class="back-link">Ir a iniciar sesi&oacute;n</a>
+    </div>
+
+    <!-- FORMULARIO -->
+    <form class="register-form" (ngSubmit)="register()" #f="ngForm" *ngIf="!success">
+
+      <div class="form-group">
+        <label for="email">Correo institucional</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          placeholder="ejemplo@uteq.edu.ec"
+          [(ngModel)]="email"
+          required
+        />
+        <small class="hint">Solo correos @uteq.edu.ec</small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="loading || !emailValid">
+          {{ loading ? 'Enviando...' : 'Enviar credenciales' }}
+        </button>
+      </div>
+
+      <p class="form-error" *ngIf="error">{{ error }}</p>
+    </form>
+
+    <div class="register-footer">
+      <a routerLink="/login" class="back-link">&larr; Volver a iniciar sesi&oacute;n</a>
+    </div>
+
+  </section>
+</main>

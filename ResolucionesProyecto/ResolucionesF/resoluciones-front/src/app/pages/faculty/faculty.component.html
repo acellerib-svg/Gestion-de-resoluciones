@@ -1,0 +1,87 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <h1>Facultades</h1>
+      <p>Administra las facultades del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openForm()">Nueva Facultad</button>
+  </header>
+
+  <section class="card" *ngIf="formOpen">
+    <div class="card-head">
+      <h2>{{ editingId ? 'Editar facultad' : 'Crear facultad' }}</h2>
+      <button class="btn-link" (click)="closeForm()">Cancelar</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="name" placeholder="Ej: Facultad de Ingenieria" />
+      </div>
+
+      <div class="form-group">
+        <label>Descripcion</label>
+        <input type="text" [(ngModel)]="description" placeholder="Opcional" />
+      </div>
+
+      <div class="form-group switch">
+        <label>Activo</label>
+        <input type="checkbox" [(ngModel)]="active" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" (click)="closeForm()" style="margin-right: 8px;">Cancelar</button>
+      <button class="btn-primary" (click)="save()" [disabled]="loading">
+        {{ loading ? 'Guardando...' : (editingId ? 'Actualizar facultad' : 'Guardar facultad') }}
+      </button>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado</h2>
+      <span class="muted" *ngIf="loading">Cargando...</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Estado</th>
+          <th style="width:180px;">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let faculty of faculties; trackBy: trackById">
+          <td>{{ faculty.id }}</td>
+          <td>{{ faculty.name }}</td>
+          <td>{{ faculty.description ?? '-' }}</td>
+          <td>
+            <span class="pill" [class.pill-ok]="faculty.active" [class.pill-off]="!faculty.active">
+              {{ faculty.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-secondary" (click)="editFaculty(faculty)" style="margin-right: 6px;">Editar</button>
+            <button class="btn-secondary btn-danger" (click)="deleteFaculty(faculty.id)">Eliminar</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && faculties.length === 0">
+          <td colspan="5" class="empty">No hay facultades registradas.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>

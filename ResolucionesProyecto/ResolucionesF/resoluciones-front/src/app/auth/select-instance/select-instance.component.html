@@ -1,0 +1,20 @@
+<div class="select-container">
+  <div class="select-card">
+    <img src="/uteqLogo.png" alt="UTEQ" class="logo">
+    <h2>Selecciona tu Instancia</h2>
+    <p class="subtitle">Elige la instancia en la que deseas trabajar</p>
+
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="instance-list">
+      <button
+        *ngFor="let inst of instances"
+        class="instance-btn"
+        [disabled]="loading"
+        (click)="select(inst)"
+      >
+        {{ inst.name }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="app-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="barraLateral">
+    <div class="barra-logo">
+      <img src="/uteqLogo.png" alt="UTEQ">
+      <span>Sistema<br>Resoluciones</span>
+    </div>
+
+    <nav class="menu">
+      <a class="menu-item" routerLink="/inicio" routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+
+      <a class="menu-item" routerLink="/resoluciones" routerLinkActive="active"
+         *ngIf="can('RESOLUTION_VIEW')">
+        Resoluciones
+      </a>
+
+      <a class="menu-item" routerLink="/bitacora" routerLinkActive="active"
+         *ngIf="can('BINNACLE_VIEW')">Movimientos</a>
+
+      <a class="menu-item" routerLink="/sessions" routerLinkActive="active"
+         *ngIf="can('SESSION_VIEW')">Sesiones</a>
+
+      <a class="menu-item notif-link" routerLink="/notificaciones" routerLinkActive="active">
+        Notificaciones
+        <span class="notif-badge" *ngIf="unreadCount > 0">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+      </a>
+
+      <hr *ngIf="showSeguridad || showConfiguracion">
+
+      <!-- SEGURIDAD CON SUBMENU -->
+      <div class="menu-group" *ngIf="showSeguridad">
+        <div class="menu-item menu-parent" (click)="toggleSeguridad()">
+          Seguridad
+          <span class="arrow" [class.open]="seguridadAbierto">&#9662;</span>
+        </div>
+
+        <div class="submenu" *ngIf="seguridadAbierto">
+          <a class="submenu-item" routerLink="/user" routerLinkActive="active"
+             *ngIf="can('USER_MANAGE')">Usuarios</a>
+          <a class="submenu-item" routerLink="/roles" routerLinkActive="active"
+             *ngIf="can('ROLE_MANAGE')">Roles</a>
+          <a class="submenu-item" routerLink="/permisos" routerLinkActive="active"
+             *ngIf="can('PERMISSION_MANAGE')">Permisos</a>
+          <a class="submenu-item" routerLink="/user-roles" routerLinkActive="active"
+             *ngIf="can('USER_ROLE_MANAGE')">Asignar Roles</a>
+        </div>
+      </div>
+
+      <!-- CONFIGURACION CON SUBMENU -->
+      <div class="menu-group" *ngIf="showConfiguracion">
+        <div class="menu-item menu-parent" (click)="toggleConfiguracion()">
+          Configuraci&oacute;n
+          <span class="arrow" [class.open]="configuracionAbierto">&#9662;</span>
+        </div>
+
+        <div class="submenu" *ngIf="configuracionAbierto">
+          <a class="submenu-item" routerLink="/niveles-jerarquicos" routerLinkActive="active"
+             *ngIf="can('LEVEL_MANAGE')">Niveles Jerarquicos</a>
+          <a class="submenu-item" routerLink="/instances" routerLinkActive="active"
+             *ngIf="can('INSTANCE_MANAGE')">Instancias</a>
+          <a class="submenu-item" routerLink="/facultades" routerLinkActive="active"
+             *ngIf="can('FACULTY_MANAGE')">Facultades</a>
+          <a class="submenu-item" routerLink="/carreras" routerLinkActive="active"
+             *ngIf="can('MAJOR_MANAGE')">Carreras</a>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- CONTENIDO -->
+  <div class="contenido">
+
+    <header class="top">
+      <div class="instance-selector" *ngIf="instances.length > 1">
+        <select [ngModel]="activeInstanceId" (ngModelChange)="onInstanceChange($event)">
+          <option *ngFor="let inst of instances" [value]="inst.id">{{ inst.name }}</option>
+        </select>
+      </div>
+      <div class="instance-label" *ngIf="instances.length === 1">
+        {{ instances[0].name }}
+      </div>
+      <div class="user-info">
+        <span class="user-name">{{ userName }}</span>
+        <button type="button" (click)="cerrarSesion()">Cerrar sesi&oacute;n</button>
+      </div>
+    </header>
+
+    <!-- AQUI SE RENDERIZAN LAS PAGINAS HIJAS -->
+    <section class="paginaP">
+      <router-outlet></router-outlet>
+    </section>
+
+  </div>
+
+</div>

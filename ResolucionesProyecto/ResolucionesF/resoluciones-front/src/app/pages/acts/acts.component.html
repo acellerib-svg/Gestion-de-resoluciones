@@ -1,0 +1,90 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <button class="btn-link" (click)="back()">&#8592; Volver a sesiones</button>
+      <h1>Actas</h1>
+      <p *ngIf="sessionInfo">
+        Sesion <strong>{{ sessionInfo.sessionNumber }}</strong>
+        &middot; {{ sessionInfo.instanceName }}
+        &middot; {{ sessionInfo.tip }}
+        &middot; {{ formatDate(sessionInfo.date) }}
+      </p>
+      <p *ngIf="!sessionInfo">Sesion #{{ sessionId }}</p>
+    </div>
+
+    <button class="btn-primary" (click)="openForm()">Nueva acta</button>
+  </header>
+
+  <section class="card" *ngIf="formOpen">
+    <div class="card-head">
+      <h2>Crear acta</h2>
+      <button class="btn-link" (click)="closeForm()">Cerrar</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" [(ngModel)]="observations" placeholder="Opcional" />
+      </div>
+    </div>
+
+    <p class="hint">El numero de acta se genera automaticamente basado en la sesion.</p>
+
+    <div class="actions">
+      <button class="btn-primary" (click)="create()" [disabled]="loading">
+        {{ loading ? 'Guardando...' : 'Guardar acta' }}
+      </button>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado de actas</h2>
+      <span class="muted" *ngIf="loading">Cargando...</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th>N° Acta</th>
+          <th>Sesion</th>
+          <th>Creacion</th>
+          <th>Cierre</th>
+          <th>Observaciones</th>
+          <th>Estado</th>
+          <th style="width:140px;">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let a of acts">
+          <td><strong>{{ a.numberAct }}</strong></td>
+          <td>{{ a.sessionNumber ?? '-' }}</td>
+          <td>{{ formatDate(a.creationDate) }}</td>
+          <td>{{ a.closingDate ? formatDate(a.closingDate) : '-' }}</td>
+          <td>{{ a.observations ?? '-' }}</td>
+          <td>
+              <span class="pill" [class.pill-ok]="!a.closed" [class.pill-off]="a.closed">
+                {{ a.closed ? 'Cerrada' : 'Abierta' }}
+              </span>
+          </td>
+          <td class="actions-cell">
+            <button class="btn-secondary" (click)="closeAct(a.id)" [disabled]="loading || a.closed">
+              Cerrar
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && acts.length === 0">
+          <td colspan="7" class="empty">No hay actas en esta sesion.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>

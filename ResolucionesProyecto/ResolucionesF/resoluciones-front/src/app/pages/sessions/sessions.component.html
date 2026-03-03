@@ -1,0 +1,107 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <h1>Sesiones</h1>
+      <p>Administra sesiones para crear actas y resoluciones.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openForm()">Nueva sesion</button>
+  </header>
+
+  <section class="card" *ngIf="formOpen">
+    <div class="card-head">
+      <h2>Crear sesion</h2>
+      <button class="btn-link" (click)="closeForm()">Cerrar</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Instancia</label>
+        <select [(ngModel)]="instanceId">
+          <option [ngValue]="null" disabled>-- Seleccionar instancia --</option>
+          <option *ngFor="let inst of instances" [ngValue]="inst.id">
+            {{ inst.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Fecha</label>
+        <input type="datetime-local" [(ngModel)]="date" />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de sesion</label>
+        <select [(ngModel)]="tip">
+          <option value="" disabled>-- Seleccionar tipo --</option>
+          <option *ngFor="let t of sessionTypes" [value]="t">{{ t }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" [(ngModel)]="observations" placeholder="Opcional" />
+      </div>
+
+      <div class="form-group switch">
+        <label>Cerrada</label>
+        <input type="checkbox" [(ngModel)]="closed" />
+      </div>
+    </div>
+
+    <p class="hint">El numero de sesion se genera automaticamente basado en la instancia seleccionada.</p>
+
+    <div class="actions">
+      <button class="btn-primary" (click)="create()" [disabled]="loading">
+        {{ loading ? 'Guardando...' : 'Guardar sesion' }}
+      </button>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado</h2>
+      <span class="muted" *ngIf="loading">Cargando...</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th>N° Sesion</th>
+          <th>Instancia</th>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Estado</th>
+          <th style="width:160px;">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let s of sessions">
+          <td><strong>{{ s.sessionNumber ?? '-' }}</strong></td>
+          <td>{{ s.instanceName || ('#' + s.instanceId) }}</td>
+          <td>{{ formatDate(s.date) }}</td>
+          <td>{{ s.tip ?? '-' }}</td>
+          <td>
+              <span class="pill" [class.pill-ok]="!s.closed" [class.pill-off]="s.closed">
+                {{ s.closed ? 'Cerrada' : 'Abierta' }}
+              </span>
+          </td>
+          <td>
+            <button class="btn-secondary" (click)="goActs(s.id)">Ver actas</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && sessions.length === 0">
+          <td colspan="6" class="empty">No hay sesiones registradas.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>

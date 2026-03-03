@@ -1,0 +1,166 @@
+<div class="page-wrap">
+  <!-- HEADER -->
+  <header class="page-head">
+    <div>
+      <h1>Resoluciones</h1>
+      <p>Administra las resoluciones del sistema.</p>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">Nueva Resolucion</button>
+  </header>
+
+  <!-- FORMULARIO CREAR -->
+  <section class="card" *ngIf="showForm">
+    <div class="card-head">
+      <h2>Crear Resolucion</h2>
+      <button class="btn-link" (click)="cancel()">Cerrar</button>
+    </div>
+
+    <div *ngIf="error" style="color:#dc2626; font-size:13px; margin-bottom:12px;">
+      {{ error }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Acta</label>
+          <select formControlName="actId">
+            <option [ngValue]="null" disabled>-- Seleccionar acta --</option>
+            <option *ngFor="let a of acts" [ngValue]="a.id">
+              {{ a.numberAct }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instancia Actual</label>
+          <select formControlName="currentInstanceId">
+            <option [ngValue]="null" disabled>-- Seleccionar instancia --</option>
+            <option *ngFor="let inst of instances" [ngValue]="inst.id">
+              {{ inst.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tema</label>
+          <input type="text" formControlName="topic" placeholder="Tema (opcional)" />
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Antecedente</label>
+          <textarea formControlName="antecedent" rows="3" placeholder="Antecedente..."></textarea>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Resolucion</label>
+          <textarea formControlName="resolution" rows="3" placeholder="Resolucion..."></textarea>
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Fundamento</label>
+          <textarea formControlName="fundament" rows="3" placeholder="Fundamento (opcional)..."></textarea>
+        </div>
+      </div>
+
+      <p class="hint">El numero de resolucion y el estado inicial (EN ELABORACION) se asignan automaticamente.</p>
+
+      <div class="actions">
+        <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="saving">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-primary" [disabled]="saving">
+          <span *ngIf="!saving">Guardar</span>
+          <span *ngIf="saving">Guardando...</span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado de Resoluciones ({{ resolutions.length }})</h2>
+
+      <button class="btn-link" (click)="load()" *ngIf="!loading">Recargar</button>
+      <span class="muted" *ngIf="loading">Cargando...</span>
+    </div>
+
+    <!-- FILTROS -->
+    <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:14px;">
+      <select [(ngModel)]="filterState" (change)="applyFilter()" style="height:36px; padding:0 10px; border-radius:8px; border:1px solid #cbd5e1; font-size:13px;">
+        <option value="">Todos los estados</option>
+        <option value="1">EN_ELABORACION</option>
+        <option value="2">APROBADO</option>
+        <option value="3">RECHAZADO</option>
+        <option value="4">TRASLADADO</option>
+        <option value="5">ARCHIVADO</option>
+      </select>
+      <select [(ngModel)]="filterInstanceId" (change)="applyFilter()" style="height:36px; padding:0 10px; border-radius:8px; border:1px solid #cbd5e1; font-size:13px;">
+        <option [ngValue]="null">Todas las instancias</option>
+        <option *ngFor="let inst of instances" [ngValue]="inst.id">{{ inst.name }}</option>
+      </select>
+      <button class="btn-link" (click)="clearFilters()" *ngIf="filterState || filterInstanceId" style="font-size:12px;">Limpiar filtros</button>
+    </div>
+
+    <div *ngIf="error && !showForm" style="color:#dc2626; font-size:13px; margin: 10px 0;">
+      {{ error }}
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading || resolutions.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>N° Resolucion</th>
+          <th>Tema</th>
+          <th>Instancia</th>
+          <th>Estado</th>
+          <th>Creacion</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let r of resolutions; trackBy: trackById">
+          <td><strong>{{ r.resolutionNumber }}</strong></td>
+          <td>{{ r.topic || '-' }}</td>
+          <td>{{ r.currentInstanceName || r.currentInstanceId || '-' }}</td>
+          <td>
+            <span class="state-badge" [ngClass]="{
+              'badge-elaboracion': r.stateName === 'EN_ELABORACION',
+              'badge-aprobado': r.stateName === 'APROBADO',
+              'badge-rechazado': r.stateName === 'RECHAZADO',
+              'badge-trasladado': r.stateName === 'TRASLADADO',
+              'badge-archivado': r.stateName === 'ARCHIVADO'
+            }">{{ r.stateName || '-' }}</span>
+          </td>
+          <td>{{ r.creationDate ? (r.creationDate | date:'short') : '-' }}</td>
+          <td class="actions-cell">
+            <a class="btn-primary btn-sm" [routerLink]="['/resoluciones', r.id]">Ver</a>
+            <button class="btn-danger btn-sm" (click)="deleteResolution(r)" [disabled]="loading || saving">Eliminar</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="resolutions.length === 0">
+          <td colspan="6" class="empty">No hay resoluciones registradas.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINACION -->
+    <div class="actions" style="justify-content: space-between;" *ngIf="totalPages > 1">
+      <button class="btn-secondary" (click)="prevPage()" [disabled]="page === 0 || loading">
+        Anterior
+      </button>
+
+      <span style="font-size:13px; color:#64748b;">
+        Pagina {{ page + 1 }} de {{ totalPages }}
+      </span>
+
+      <button class="btn-secondary" (click)="nextPage()" [disabled]="page + 1 >= totalPages || loading">
+        Siguiente
+      </button>
+    </div>
+  </section>
+</div>

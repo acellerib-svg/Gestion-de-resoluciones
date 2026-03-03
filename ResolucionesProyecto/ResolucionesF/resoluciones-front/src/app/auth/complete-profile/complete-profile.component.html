@@ -1,0 +1,120 @@
+<main class="profile-container">
+  <section class="profile-card">
+
+    <header class="profile-header">
+      <div class="logo">
+        <img src="/uteqLogo.png" alt="LogoUteq">
+      </div>
+      <h1>Completa tu perfil</h1>
+      <p>Ingresa tus datos personales para continuar</p>
+    </header>
+
+    <form class="profile-form" (ngSubmit)="submit()" #f="ngForm">
+
+      <div class="form-group">
+        <label for="names">Nombres</label>
+        <input
+          id="names"
+          name="names"
+          type="text"
+          placeholder="Ingrese sus nombres"
+          [(ngModel)]="names"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="surnames">Apellidos</label>
+        <input
+          id="surnames"
+          name="surnames"
+          type="text"
+          placeholder="Ingrese sus apellidos"
+          [(ngModel)]="surnames"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Telefono <span class="optional">(opcional)</span></label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          placeholder="Ej: 0991234567"
+          [(ngModel)]="phone"
+        />
+      </div>
+
+      <div class="form-divider">
+        <span>Cambio de contrase&ntilde;a</span>
+      </div>
+
+      <div class="form-group">
+        <label for="newPassword">Nueva contrase&ntilde;a <span class="optional">(opcional)</span></label>
+        <div class="input-password-wrapper">
+          <input
+            id="newPassword"
+            name="newPassword"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Minimo 6 caracteres"
+            [(ngModel)]="newPassword"
+          />
+          <button type="button" class="toggle-password" (click)="togglePassword()">
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <path d="M1 1l22 22"/>
+              <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="newPassword">
+        <label for="confirmPassword">Confirmar contrase&ntilde;a</label>
+        <div class="input-password-wrapper">
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            placeholder="Repita la contrase&ntilde;a"
+            [(ngModel)]="confirmPassword"
+          />
+          <button type="button" class="toggle-password" (click)="toggleConfirmPassword()">
+            <svg *ngIf="!showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showConfirmPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+              <path d="M1 1l22 22"/>
+              <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+            </svg>
+          </button>
+        </div>
+        <small class="hint error-hint" *ngIf="confirmPassword && newPassword !== confirmPassword">
+          Las contrase&ntilde;as no coinciden
+        </small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="loading || !formValid">
+          {{ loading ? 'Guardando...' : 'Guardar y continuar' }}
+        </button>
+      </div>
+
+      <p class="form-error" *ngIf="error">{{ error }}</p>
+    </form>
+
+    <footer class="profile-footer">
+      <small>&copy; 2026 - Sistema de Resoluciones</small>
+    </footer>
+
+  </section>
+</main>

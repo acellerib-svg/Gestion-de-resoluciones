@@ -1,0 +1,97 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <h1>Carreras</h1>
+      <p>Administra las carreras del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openForm()">Nueva Carrera</button>
+  </header>
+
+  <section class="card" *ngIf="formOpen">
+    <div class="card-head">
+      <h2>{{ editingId ? 'Editar carrera' : 'Crear carrera' }}</h2>
+      <button class="btn-link" (click)="closeForm()">Cancelar</button>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" [(ngModel)]="name" placeholder="Ej: Ingenieria en Software" />
+      </div>
+
+      <div class="form-group">
+        <label>Descripcion</label>
+        <input type="text" [(ngModel)]="description" placeholder="Opcional" />
+      </div>
+
+      <div class="form-group">
+        <label>Facultad</label>
+        <select [(ngModel)]="facultyId">
+          <option [ngValue]="null" disabled>Seleccione una facultad</option>
+          <option *ngFor="let f of faculties" [ngValue]="f.id">{{ f.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group switch">
+        <label>Activo</label>
+        <input type="checkbox" [(ngModel)]="active" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-secondary" (click)="closeForm()" style="margin-right: 8px;">Cancelar</button>
+      <button class="btn-primary" (click)="save()" [disabled]="loading">
+        {{ loading ? 'Guardando...' : (editingId ? 'Actualizar carrera' : 'Guardar carrera') }}
+      </button>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado</h2>
+      <span class="muted" *ngIf="loading">Cargando...</span>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripcion</th>
+          <th>Facultad</th>
+          <th>Estado</th>
+          <th style="width:180px;">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let major of majors; trackBy: trackById">
+          <td>{{ major.id }}</td>
+          <td>{{ major.name }}</td>
+          <td>{{ major.description ?? '-' }}</td>
+          <td>{{ major.faculty?.name ?? '-' }}</td>
+          <td>
+            <span class="pill" [class.pill-ok]="major.active" [class.pill-off]="!major.active">
+              {{ major.active ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-secondary" (click)="editMajor(major)" style="margin-right: 6px;">Editar</button>
+            <button class="btn-secondary btn-danger" (click)="deleteMajor(major.id)">Eliminar</button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && majors.length === 0">
+          <td colspan="6" class="empty">No hay carreras registradas.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>

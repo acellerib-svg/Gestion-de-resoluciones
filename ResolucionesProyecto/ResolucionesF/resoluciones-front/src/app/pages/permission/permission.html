@@ -1,0 +1,141 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <h1>Permisos</h1>
+      <p>Administra los permisos del sistema.</p>
+    </div>
+
+    <button class="btn-primary" (click)="openCreate()">➕ Nuevo Permiso</button>
+  </header>
+
+  <section class="card" *ngIf="showForm">
+    <div class="card-head">
+      <h2>{{ isEdit ? 'Editar Permiso' : 'Crear Permiso' }}</h2>
+      <button class="btn-secondary" (click)="cancel()">Cerrar</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Código</label>
+          <input
+            formControlName="code"
+            placeholder="Ej: USER_READ"
+            [class.invalid]="form.get('code')?.invalid && form.get('code')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Nombre</label>
+          <input
+            formControlName="name"
+            placeholder="Ej: Ver usuarios"
+            [class.invalid]="form.get('name')?.invalid && form.get('name')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Módulo</label>
+          <input
+            formControlName="module"
+            placeholder="Ej: SEGURIDAD"
+            [class.invalid]="form.get('module')?.invalid && form.get('module')?.touched"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea formControlName="description" rows="3" placeholder="Opcional"></textarea>
+        </div>
+      </div>
+
+      <div class="form-group switch">
+        <label>
+          <input type="checkbox" formControlName="active" />
+          <span>Activo</span>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-secondary" (click)="cancel()" [disabled]="saving">
+          Cancelar
+        </button>
+
+        <button type="submit" class="btn-primary" [disabled]="saving">
+          {{ saving ? '⏳ Guardando...' : (isEdit ? '💾 Actualizar' : '💾 Guardar') }}
+        </button>
+      </div>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado ({{ filtered.length }})</h2>
+
+      <div class="filters">
+        <input
+          class="search"
+          type="text"
+          placeholder="Buscar por código, nombre o módulo..."
+          [(ngModel)]="search"
+          (input)="applyFilters()"
+        />
+
+        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+          <option value="ALL">Todos</option>
+          <option value="ACTIVE">Activos</option>
+          <option value="INACTIVE">Inactivos</option>
+        </select>
+
+        <button class="btn-link" (click)="load()" *ngIf="!loading">🔄 Recargar</button>
+        <span class="muted" *ngIf="loading">⏳ Cargando...</span>
+      </div>
+    </div>
+
+    <div class="table-wrap" *ngIf="!loading || filtered.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Módulo</th>
+          <th>Estado</th>
+          <th style="width:260px">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let p of filtered; trackBy: trackById">
+          <td>{{ p.id }}</td>
+          <td><strong>{{ p.code }}</strong></td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.module }}</td>
+          <td>
+              <span class="pill" [class.pill-ok]="p.active" [class.pill-off]="!p.active">
+                {{ p.active ? '✓ Activo' : '✗ Inactivo' }}
+              </span>
+          </td>
+          <td>
+            <button class="btn-secondary" (click)="openEdit(p)" [disabled]="saving">
+              ✏️ Editar
+            </button>
+
+            <button class="btn-danger" style="margin-left:6px" (click)="toggle(p)" [disabled]="saving">
+              {{ p.active ? '⛔ Desactivar' : '✅ Activar' }}
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && filtered.length === 0">
+          <td colspan="6" class="empty">📭 No hay permisos registrados.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+</div>

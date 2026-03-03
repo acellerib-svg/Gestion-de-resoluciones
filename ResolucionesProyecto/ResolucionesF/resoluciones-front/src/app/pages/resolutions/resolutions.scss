@@ -1,0 +1,380 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.page-wrap {
+  padding: 24px;
+  background:
+    radial-gradient(800px 400px at 10% 10%, #dbeafe, transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, #ede9fe, transparent 55%),
+    linear-gradient(180deg, #f8fafc, #eef2ff);
+  min-height: 100vh;
+}
+
+/* ============ HEADER ============ */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.page-head h1 {
+  font-size: 20px;
+  color: #1B7505;
+  margin: 0 0 4px 0;
+  font-weight: 700;
+}
+
+.page-head p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 25px 50px rgba(15, 23, 42, 0.10);
+  margin-bottom: 16px;
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.card-head h2 {
+  font-size: 16px;
+  color: #334155;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ============ FORMULARIO ============ */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+
+.form-group textarea {
+  height: auto;
+  min-height: 80px;
+  padding: 10px 14px;
+  resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #1B7505;
+  box-shadow: 0 0 0 3px rgba(27, 117, 5, 0.10);
+}
+
+.hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: #64748b;
+  font-style: italic;
+}
+
+.form-group input.invalid {
+  border-color: #dc2626;
+}
+
+.form-group input.invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10);
+}
+
+/* Switch */
+.form-group.switch {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.form-group.switch input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #1B7505;
+}
+
+/* ============ BOTONES ============ */
+.actions {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary {
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1B7505, #166004);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-secondary {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== BOTONES TAMANO PEQUENO ===== */
+.btn-sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* ===== BOTON ELIMINAR ===== */
+.btn-danger {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(220, 38, 38, 0.40);
+  background: rgba(220, 38, 38, 0.05);
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.12);
+  border-color: #dc2626;
+}
+
+.btn-danger:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn-danger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ============ ACTIONS CELL ============ */
+.actions-cell {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+/* ============ STATE BADGES ============ */
+.state-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.badge-elaboracion {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-aprobado {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-rechazado {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.badge-trasladado {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.badge-archivado {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* ============ TABLA ============ */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  background: #f8fafc;
+  color: #475569;
+  padding: 12px 14px;
+  border-bottom: 2px solid #e2e8f0;
+  text-align: left;
+}
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+td.empty {
+  text-align: center;
+  color: #94a3b8;
+  padding: 32px 14px;
+}
+
+/* ============ PILLS ============ */
+.pill {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+}
+
+.pill-ok {
+  background: rgba(27, 117, 5, 0.12);
+  color: #1B7505;
+}
+
+.pill-off {
+  background: rgba(100, 116, 139, 0.10);
+  color: #64748b;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}
+/* ============ BOTON RECARGAR ============ */
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.table-head .btn-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(27, 117, 5, 0.08);
+  color: #1B7505;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid rgba(27, 117, 5, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.table-head .btn-link:hover {
+  background: rgba(27, 117, 5, 0.16);
+  border-color: #1B7505;
+}
+
+.table-head .btn-link:active {
+  transform: scale(0.96);
+}
+
+.table-head .btn-link:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Texto de carga */
+.table-head .muted {
+  font-size: 13px;
+  color: #64748b;
+}

@@ -1,0 +1,287 @@
+/* =========================
+   RESET + FUENTE
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+.page-wrap {
+  padding: 24px;
+  background:
+    radial-gradient(800px 400px at 10% 10%, #dbeafe, transparent 60%),
+    radial-gradient(900px 500px at 90% 30%, #ede9fe, transparent 55%),
+    linear-gradient(180deg, #f8fafc, #eef2ff);
+  min-height: 100vh;
+}
+
+/* =========================
+   HEADER
+========================= */
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.page-head h1 {
+  font-size: 20px;
+  color: #1B7505;
+  font-weight: 700;
+}
+
+.page-head p {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 25px 50px rgba(15, 23, 42, 0.10);
+  margin-bottom: 18px;
+}
+
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.card-head h2 {
+  font-size: 16px;
+  color: #334155;
+  font-weight: 600;
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+}
+
+/* Inputs */
+.form-group input,
+.form-group textarea {
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+  font-size: 14px;
+  padding: 0 14px;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+
+.form-group input {
+  height: 44px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  padding: 12px 14px;
+  resize: vertical;
+}
+
+/* Focus */
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #1B7505;
+  box-shadow: 0 0 0 3px rgba(27, 117, 5, 0.12);
+  outline: none;
+}
+
+/* Error */
+.form-group input.invalid {
+  border-color: #dc2626;
+}
+
+/* Switch */
+.form-group.switch {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.form-group.switch input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #1B7505;
+}
+
+/* =========================
+   BOTONES
+========================= */
+.actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-primary {
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1B7505, #166004);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn-secondary {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  color: #334155;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: #f8fafc;
+}
+
+/* Botón desactivar */
+.btn-danger {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(220, 38, 38, 0.45);
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+/* =========================
+   TABLA
+========================= */
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead th {
+  background: #f8fafc;
+  color: #475569;
+  padding: 12px 14px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* =========================
+   ESTADO (PILLS)
+========================= */
+.pill {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pill-ok {
+  background: rgba(27, 117, 5, 0.12);
+  color: #1B7505;
+}
+
+.pill-off {
+  background: rgba(100, 116, 139, 0.12);
+  color: #64748b;
+}
+
+/* =========================
+   TABLE HEAD
+========================= */
+.table-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.table-head .btn-link {
+  padding: 6px 14px;
+  border-radius: 10px;
+  background: rgba(27, 117, 5, 0.1);
+  color: #1B7505;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1.5px solid rgba(27, 117, 5, 0.25);
+  cursor: pointer;
+}
+
+.table-head .muted {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

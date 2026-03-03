@@ -1,0 +1,219 @@
+/*parte general*/
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f8fafc;
+}
+
+.barraLateral {
+  width: 240px;
+  background: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.barra-logo img {
+  width: 42px;
+  height: 42px;
+}
+
+.barra-logo span {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1B7505;
+  line-height: 1.2;
+}
+
+/* apartado del menu */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+}
+
+.menu-item:hover {
+  background: #f1f5f9;
+}
+
+.menu-item.active {
+  background: rgba(27, 117, 5, 0.12);
+  color: #1B7505;
+  font-weight: 600;
+}
+
+.menu hr {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* contenido principal */
+.contenido {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 24px;
+}
+
+.top input {
+  width: 320px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #cbd5f5;
+  font-size: 14px;
+}
+
+.top input:focus {
+  outline: none;
+  border-color: #1B7505;
+}
+
+/* selector de instancia en header */
+.instance-selector select {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 13px;
+  color: #334155;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.instance-selector select:focus {
+  outline: none;
+  border-color: #1B7505;
+}
+
+.instance-label {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* informacion usuario*/
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+}
+
+.user-info button {
+  border: none;
+  background: transparent;
+  color: #1B7505;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* apartado principal */
+.paginaP {
+  padding: 28px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ========================= */
+/* SUBMENU SEGURIDAD */
+/* ========================= */
+
+.menu-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-parent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.arrow {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  margin-top: 4px;
+  gap: 4px;
+}
+
+.submenu-item {
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #475569;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.submenu-item:hover {
+  background: #f1f5f9;
+}
+
+.submenu-item.active {
+  background: rgba(27, 117, 5, 0.12);
+  color: #1B7505;
+  font-weight: 600;
+}
+
+/* ========================= */
+/* NOTIFICATION BADGE         */
+/* ========================= */
+
+.notif-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.notif-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}

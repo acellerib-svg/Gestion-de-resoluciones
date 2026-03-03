@@ -1,0 +1,183 @@
+<div class="page-wrap">
+  <!-- HEADER -->
+  <header class="page-head">
+    <div>
+      <h1>Instancias</h1>
+      <p>Administra las instancias del sistema.</p>
+    </div>
+    <button class="btn-primary" (click)="openCreate()">➕ Nueva Instancia</button>
+  </header>
+
+  <!-- FORMULARIO -->
+  <section class="card" *ngIf="showForm">
+    <div class="card-head">
+      <h2>{{ isEdit ? 'Editar Instancia' : 'Crear Instancia' }}</h2>
+      <button class="btn-link" (click)="cancel()">Cerrar</button>
+    </div>
+
+    <p *ngIf="error" style="color: #dc2626; background: #fef2f2; padding: 8px 12px; border-radius: 6px; margin-bottom: 12px;">{{ error }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-grid">
+
+        <!-- Nombre -->
+        <div class="form-group">
+          <label>Nombre</label>
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Ej: Instancia 1">
+        </div>
+
+        <!-- Descripción -->
+        <div class="form-group">
+          <label>Descripción</label>
+          <textarea
+            formControlName="description"
+            placeholder="Descripción opcional"
+            rows="3"></textarea>
+        </div>
+
+        <!-- Nivel Jerarquico -->
+        <div class="form-group">
+          <label>Nivel Jer&aacute;rquico</label>
+          <select formControlName="levelId">
+            <option [ngValue]="null" disabled>-- Seleccione un nivel --</option>
+            <option *ngFor="let level of levels" [ngValue]="level.id">
+              {{ level.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Carrera -->
+        <div class="form-group">
+          <label>Carrera (opcional)</label>
+          <select formControlName="majorId">
+            <option [ngValue]="null">-- Ninguna --</option>
+            <option *ngFor="let major of majors" [ngValue]="major.id">
+              {{ major.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Instancia Padre -->
+        <div class="form-group">
+          <label>Instancia Padre (opcional)</label>
+          <select formControlName="instanceFatherId">
+            <option [ngValue]="null">-- Ninguna --</option>
+            <option *ngFor="let inst of instances" [ngValue]="inst.id">
+              {{ inst.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Estado -->
+        <div class="form-group switch">
+          <label>
+            <input type="checkbox" formControlName="active">
+            <span>Activo</span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Botones -->
+      <div class="actions">
+        <button
+          type="button"
+          class="btn-secondary"
+          (click)="cancel()"
+          [disabled]="saving">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primary"
+          [disabled]="saving">
+          <span *ngIf="!saving">
+            {{ isEdit ? '💾 Actualizar' : '💾 Guardar' }}
+          </span>
+          <span *ngIf="saving">
+            {{ isEdit ? '⏳ Actualizando...' : '⏳ Guardando...' }}
+          </span>
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- LISTADO -->
+  <section class="card">
+    <div class="table-head">
+      <h2>Listado de Instancias ({{ instances.length }})</h2>
+      <button
+        class="btn-link"
+        (click)="loadInstances()"
+        *ngIf="!loading">
+        🔄 Recargar
+      </button>
+      <span class="muted" *ngIf="loading">⏳ Cargando...</span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="table-wrap" *ngIf="!loading || instances.length > 0">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Nivel</th>
+          <th>Carrera</th>
+          <th>Inst. Padre</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let instance of instances; trackBy: trackById">
+          <td>{{ instance.id }}</td>
+          <td><strong>{{ instance.name }}</strong></td>
+          <td>{{ instance.levelName || '-' }}</td>
+          <td>{{ instance.majorName || '-' }}</td>
+          <td>{{ instance.instanceFatherName || '-' }}</td>
+          <td>
+              <span
+                class="pill"
+                [class.pill-ok]="instance.active"
+                [class.pill-off]="!instance.active">
+                {{ instance.active ? '✓ Activo' : '✗ Inactivo' }}
+              </span>
+          </td>
+          <td>
+            <button
+              class="btn-secondary"
+              (click)="openEdit(instance)"
+              [disabled]="saving">
+              ✏️ Editar
+            </button>
+
+            <button
+              class="btn-secondary"
+              style="margin-left: 6px; color: #dc2626;"
+              (click)="deleteInstance(instance)"
+              [disabled]="saving">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="instances.length === 0">
+          <td colspan="7" class="empty">
+            📭 No hay instancias registradas.
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Carga inicial -->
+    <div *ngIf="loading && instances.length === 0" class="loading-state">
+      <p>⏳ Cargando instancias...</p>
+    </div>
+  </section>
+</div>

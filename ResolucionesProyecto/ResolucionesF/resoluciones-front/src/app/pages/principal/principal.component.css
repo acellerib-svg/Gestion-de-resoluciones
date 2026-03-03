@@ -1,0 +1,48 @@
+h1 {
+  font-size: 20px;
+  color: #1B7505;
+  margin-bottom: 4px;
+}
+
+.pag-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+/* recuadros */
+.cartas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.carta {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+}
+
+.carta h3 {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.carta strong {
+  font-size: 26px;
+  color: #1B7505;
+}
+
+.error {
+  font-size: 13px;
+  color: #dc2626;
+  margin-bottom: 12px;
+}
+
+.muted {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 12px;
+}

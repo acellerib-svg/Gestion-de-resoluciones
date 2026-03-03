@@ -1,0 +1,228 @@
+<div class="page-wrap" *ngIf="!loading && resolution">
+  <!-- HEADER -->
+  <header class="detail-header">
+    <div class="header-left">
+      <a routerLink="/resoluciones" class="back-link">&larr; Volver</a>
+      <h1>Resolucion #{{ resolution.resolutionNumber }}</h1>
+      <p class="topic">{{ resolution.topic || 'Sin tema' }}</p>
+    </div>
+    <div class="header-right">
+      <span class="state-badge" [ngClass]="getStateClass(resolution.stateName)">
+        {{ resolution.stateName }}
+      </span>
+      <span class="instance-label">{{ resolution.currentInstanceName }}</span>
+    </div>
+  </header>
+
+  <!-- ACTION BUTTONS -->
+  <div class="action-bar">
+    <button class="btn-success" *ngIf="canApprove" (click)="openAction('approve')" [disabled]="actionLoading">Aprobar</button>
+    <button class="btn-danger" *ngIf="canReject" (click)="openAction('reject')" [disabled]="actionLoading">Rechazar</button>
+    <button class="btn-warning" *ngIf="canTransfer" (click)="openTransfer()" [disabled]="actionLoading">Trasladar</button>
+    <button class="btn-secondary" *ngIf="canArchive" (click)="openAction('archive')" [disabled]="actionLoading">Archivar</button>
+    <button class="btn-primary" *ngIf="canReopen" (click)="openAction('reopen')" [disabled]="actionLoading">Reabrir</button>
+    <button class="btn-edit" *ngIf="canEdit && !editing" (click)="startEdit()">Editar contenido</button>
+  </div>
+
+  <div *ngIf="error" class="error-msg">{{ error }}</div>
+
+  <!-- TABS -->
+  <nav class="tabs">
+    <button [class.active]="activeTab === 'contenido'" (click)="setTab('contenido')">Contenido</button>
+    <button [class.active]="activeTab === 'documentos'" (click)="setTab('documentos')">
+      Documentos
+      <span class="tab-badge" *ngIf="documents.length > 0">{{ documents.length }}</span>
+    </button>
+    <button [class.active]="activeTab === 'historial'" (click)="setTab('historial')">Historial</button>
+    <button [class.active]="activeTab === 'versiones'" (click)="setTab('versiones')">Versiones</button>
+  </nav>
+
+  <!-- TAB: CONTENIDO -->
+  <section class="card tab-content" *ngIf="activeTab === 'contenido'">
+    <ng-container *ngIf="!editing">
+      <div class="content-section">
+        <h3>Antecedente</h3>
+        <div class="content-text">{{ resolution.antecedent || 'Sin antecedente' }}</div>
+      </div>
+      <div class="content-section">
+        <h3>Resolucion</h3>
+        <div class="content-text">{{ resolution.resolution || 'Sin resolucion' }}</div>
+      </div>
+      <div class="content-section">
+        <h3>Fundamento</h3>
+        <div class="content-text">{{ resolution.fundament || 'Sin fundamento' }}</div>
+      </div>
+      <div class="content-meta">
+        <span *ngIf="resolution.createdByName">Creado por: {{ resolution.createdByName }}</span>
+        <span *ngIf="resolution.updatedByName">Actualizado por: {{ resolution.updatedByName }}</span>
+        <span>Fecha: {{ resolution.creationDate | date:'medium' }}</span>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="editing">
+      <div class="edit-form">
+        <div class="form-group">
+          <label>Tema</label>
+          <input type="text" [(ngModel)]="editTopic" />
+        </div>
+        <div class="form-group">
+          <label>Antecedente</label>
+          <textarea rows="5" [(ngModel)]="editAntecedent"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Resolucion</label>
+          <textarea rows="5" [(ngModel)]="editResolution"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Fundamento</label>
+          <textarea rows="5" [(ngModel)]="editFundament"></textarea>
+        </div>
+        <div class="edit-actions">
+          <button class="btn-secondary" (click)="cancelEdit()" [disabled]="actionLoading">Cancelar</button>
+          <button class="btn-primary" (click)="saveEdit()" [disabled]="actionLoading">
+            {{ actionLoading ? 'Guardando...' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+
+  <!-- TAB: DOCUMENTOS -->
+  <section class="card tab-content" *ngIf="activeTab === 'documentos'">
+    <!-- Upload area -->
+    <div class="upload-area">
+      <label class="upload-btn">
+        <input type="file" (change)="onFileSelected($event)" [disabled]="uploading" hidden />
+        {{ uploading ? 'Subiendo...' : 'Subir documento' }}
+      </label>
+      <span class="upload-hint">Max. 20 MB por archivo</span>
+    </div>
+
+    <div *ngIf="uploadError" class="error-msg" style="margin-top:12px;">{{ uploadError }}</div>
+
+    <!-- Documents list -->
+    <div class="doc-list" *ngIf="documents.length > 0">
+      <div class="doc-item" *ngFor="let doc of documents">
+        <div class="doc-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1B7505" stroke-width="2">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline points="14,2 14,8 20,8"/>
+          </svg>
+        </div>
+        <div class="doc-info">
+          <span class="doc-name">{{ doc.name }}</span>
+          <span class="doc-meta">{{ formatFileSize(doc.sizeBytes) }} &middot; {{ doc.uploadDate | date:'short' }}</span>
+        </div>
+        <div class="doc-actions">
+          <button class="btn-secondary btn-sm" (click)="downloadDoc(doc)">Descargar</button>
+          <button class="btn-danger btn-sm" (click)="deleteDoc(doc)">Eliminar</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="empty-msg" *ngIf="documents.length === 0 && !uploading">No hay documentos adjuntos.</p>
+  </section>
+
+  <!-- TAB: HISTORIAL -->
+  <section class="card tab-content" *ngIf="activeTab === 'historial'">
+    <div class="timeline" *ngIf="history.length > 0">
+      <div class="timeline-item" *ngFor="let h of history">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-header">
+            <strong>{{ h.action }}</strong>
+            <span class="timeline-date">{{ h.date | date:'medium' }}</span>
+          </div>
+          <p *ngIf="h.observations">{{ h.observations }}</p>
+          <small class="timeline-meta">
+            Por: {{ h.username || 'Sistema' }}
+            <span *ngIf="h.instanceOriginName"> | Desde: {{ h.instanceOriginName }}</span>
+            <span *ngIf="h.instanceDestinationName"> &rarr; {{ h.instanceDestinationName }}</span>
+          </small>
+        </div>
+      </div>
+    </div>
+    <p class="empty-msg" *ngIf="history.length === 0">Sin registros de historial.</p>
+  </section>
+
+  <!-- TAB: VERSIONES -->
+  <section class="card tab-content" *ngIf="activeTab === 'versiones'">
+    <div class="table-wrap" *ngIf="versions.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Fecha</th>
+            <th>Usuario</th>
+            <th>Razon</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of versions">
+            <td><strong>v{{ v.version }}</strong></td>
+            <td>{{ v.date | date:'medium' }}</td>
+            <td>{{ v.userName || '-' }}</td>
+            <td>{{ v.reason || '-' }}</td>
+            <td>
+              <button class="btn-secondary btn-sm" (click)="revertVersion(v)" [disabled]="actionLoading">
+                Revertir
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="empty-msg" *ngIf="versions.length === 0">Sin versiones guardadas.</p>
+  </section>
+
+  <!-- MODAL: ACTION -->
+  <div class="modal-overlay" *ngIf="showActionModal" (click)="closeAction()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3>{{ getActionLabel(actionType) }} Resolucion</h3>
+      <div class="form-group">
+        <label>Observaciones</label>
+        <textarea rows="3" [(ngModel)]="actionObservations" placeholder="Observaciones opcionales..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeAction()">Cancelar</button>
+        <button class="btn-primary" (click)="confirmAction()" [disabled]="actionLoading">
+          {{ actionLoading ? 'Procesando...' : getActionLabel(actionType) }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TRANSFER -->
+  <div class="modal-overlay" *ngIf="showTransferModal" (click)="closeTransfer()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h3>Trasladar Resolucion</h3>
+      <div class="form-group">
+        <label>Instancia destino</label>
+        <select [(ngModel)]="transferInstanceId">
+          <option [ngValue]="null" disabled>-- Seleccione instancia --</option>
+          <option *ngFor="let inst of instances"
+                  [ngValue]="inst.id"
+                  [disabled]="inst.id === resolution.currentInstanceId">
+            {{ inst.name }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Observaciones</label>
+        <textarea rows="3" [(ngModel)]="transferObservations" placeholder="Observaciones opcionales..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" (click)="closeTransfer()">Cancelar</button>
+        <button class="btn-primary" (click)="confirmTransfer()" [disabled]="actionLoading || !transferInstanceId">
+          {{ actionLoading ? 'Procesando...' : 'Trasladar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="page-wrap" *ngIf="loading">
+  <div class="loading-msg">Cargando resolucion...</div>
+</div>

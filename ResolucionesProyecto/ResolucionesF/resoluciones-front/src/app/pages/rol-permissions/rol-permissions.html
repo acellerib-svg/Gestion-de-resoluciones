@@ -1,0 +1,71 @@
+<div class="page-wrap">
+  <header class="page-head">
+    <div>
+      <button class="btn-link" (click)="back()">← Volver a roles</button>
+      <h1>Permisos del Rol</h1>
+      <p class="muted">
+        Rol: <strong>{{ rol?.name || ('#' + rolId) }}</strong>
+      </p>
+    </div>
+
+    <button class="btn-primary" (click)="save()" [disabled]="saving || loading">
+      {{ saving ? 'Guardando...' : 'Guardar cambios' }}
+    </button>
+  </header>
+
+  <section class="card">
+    <div class="filters">
+      <input
+        type="text"
+        class="search"
+        placeholder="Buscar por código, nombre o módulo..."
+        [(ngModel)]="search"
+        (input)="applyFilters()"
+      />
+
+      <label class="check">
+        <input type="checkbox" [(ngModel)]="onlyActive" (change)="applyFilters()" />
+        Solo activos
+      </label>
+
+      <span class="muted" *ngIf="loading">⏳ Cargando...</span>
+    </div>
+
+    <p class="error" *ngIf="error">{{ error }}</p>
+
+    <div class="modules" *ngIf="!loading">
+      <div class="module-card" *ngFor="let g of grouped">
+        <div class="module-head">
+          <div>
+            <h3>{{ g.module }}</h3>
+            <small class="muted">{{ g.items.length }} permisos</small>
+          </div>
+
+          <label class="check">
+            <input
+              type="checkbox"
+              [checked]="isModuleFullyChecked(g.module)"
+              (change)="toggleModule(g.module, $any($event.target).checked)"
+            />
+            Seleccionar todo
+          </label>
+        </div>
+
+        <div class="perm-list">
+          <label class="perm" *ngFor="let p of g.items">
+            <input type="checkbox" [checked]="isChecked(p)" (change)="toggleOne(p)" />
+            <div class="perm-text">
+              <strong>{{ p.code }}</strong>
+              <div class="muted">{{ p.name }}</div>
+              <div class="muted" *ngIf="p.description">{{ p.description }}</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div *ngIf="grouped.length === 0" class="empty">
+        📭 No hay permisos para mostrar (revisa filtros).
+      </div>
+    </div>
+  </section>
+</div>
